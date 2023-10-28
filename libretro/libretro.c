@@ -378,7 +378,11 @@ void retro_get_system_av_info(struct retro_system_av_info *info)
       info->timing.fps = 21477272.0 / 357366.0;
    else
       info->timing.fps = 21281370.0 / 425568.0;
+#if !defined(SF2000)
    info->timing.sample_rate = 32040.5;
+#else
+   info->timing.sample_rate = 11025;
+#endif
 }
 
 static void snes_init (void)
@@ -412,7 +416,7 @@ static void snes_init (void)
 
    GFX.Pitch = use_overscan ? 1024 : 2048; // FIXME: What is this supposed to do? Overscan has nothing to do with anything like this. If this is the Wii performance hack, it should be done differently.
 
-#if defined(_POSIX_C_SOURCE) && (_POSIX_C_SOURCE >= 200112L)
+#if defined(_POSIX_C_SOURCE) && (_POSIX_C_SOURCE >= 200112L) && !defined(SF2000)
    /* request 128-bit alignment here if possible */
    posix_memalign((void**)&GFX.Screen, 16, GFX.Pitch * 512 * sizeof(uint16));
 #else
